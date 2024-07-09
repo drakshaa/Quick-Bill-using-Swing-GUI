@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.db.DB;
-import com.model.CashierDetail;
 import com.model.UpdateStock;
 
 public class UpdateStockServiceImpl implements UpdateStockService {
@@ -25,32 +24,31 @@ public class UpdateStockServiceImpl implements UpdateStockService {
 		
 	@Override
 	public List<UpdateStock> getAllStock() {
-		List<CashierDetail> dlist = new ArrayList<>();
+		List<UpdateStock> slist = new ArrayList<>();
 		
 		try {
-			String sql = "Select * from cashierdetail";
+			String sql = "Select * from updatestock";
 			Statement stm = DB.connectDb().createStatement();
 			ResultSet rs = stm.executeQuery(sql);
 			
 			while (rs.next()) {
 				
 				//row mapping object
-				CashierDetail cd = new CashierDetail();
+				UpdateStock us = new UpdateStock();
 				
-				cd.setId(rs.getInt("id"));
-				cd.setName(rs.getString("name"));
-				cd.setPhone_no(rs.getString("phoneno"));
-				cd.setAddress(rs.getString("address"));
-				cd.setEmail(rs.getString("email"));
-				cd.setPassword(rs.getString("password"));
+				us.setProductId(rs.getInt("productid"));
+				us.setProductName(rs.getString("productname"));
+				us.setQuantityAvail(rs.getInt("quantityavail"));
+				us.setQuantityAdded(rs.getInt("quantityadded"));
+				us.setMrp(rs.getInt("mrp"));
 				
-				dlist.add(cd);
+				slist.add(us);
 			
 			}
 			} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return dlist;
+		return slist;
 	}
 
 	@Override

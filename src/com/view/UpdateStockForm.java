@@ -14,13 +14,17 @@ import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.model.CashierDetail;
 import com.model.UpdateStock;
+import com.service.CashierDetailImpl;
+import com.service.CashierDetails;
 import com.service.UpdateStockService;
 import com.service.UpdateStockServiceImpl;
 
 import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class UpdateStockForm extends JFrame {
@@ -52,6 +56,7 @@ public class UpdateStockForm extends JFrame {
 				try {
 					UpdateStockForm frame = new UpdateStockForm();
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -85,6 +90,8 @@ public class UpdateStockForm extends JFrame {
 		contentPane.add(getMrpTxt());
 		contentPane.add(getBtnNewButton());
 		contentPane.add(getBtnUpdate());
+		displayData();
+	
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -210,6 +217,7 @@ public class UpdateStockForm extends JFrame {
 				
 					UpdateStockService stock = new UpdateStockServiceImpl();
 					stock.addStock(us);
+					displayData();
 					JOptionPane.showMessageDialog(null, "Added Success");	
 	
 				}
@@ -224,6 +232,23 @@ public class UpdateStockForm extends JFrame {
 	private JButton getBtnUpdate() {
 		if (btnUpdate == null) {
 			btnUpdate = new JButton("Update");
+			btnUpdate.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					UpdateStock us = new UpdateStock();
+					us.setProductId(Integer.parseInt(idTxt.getText()));
+					us.setProductName(nameTxt.getText());
+					us.setQuantityAvail(Integer.parseInt(availTxt.getText()));
+					us.setQuantityAdded(Integer.parseInt(addedTxt.getText()));
+					us.setMrp(Integer.parseInt(mrpTxt.getText()));
+				
+					UpdateStockService stock = new UpdateStockServiceImpl();
+					stock.updateStock(us);
+					displayData();
+					JOptionPane.showMessageDialog(null, "Update Success");		
+					
+				}
+			});
 			btnUpdate.setBackground(new Color(151, 169, 255));
 			btnUpdate.setForeground(new Color(255, 255, 255));
 			btnUpdate.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -231,4 +256,38 @@ public class UpdateStockForm extends JFrame {
 		}
 		return btnUpdate;
 	}
+	
+	private void displayData(){
+		 UpdateStockService stock = new UpdateStockServiceImpl();
+			List<UpdateStock> slist = stock.getAllStock();
+			
+			DefaultTableModel tmodel = (DefaultTableModel) table.getModel();
+			
+			tmodel.setRowCount(0); //table reset
+			
+			for(UpdateStock us : slist) {
+				
+				tmodel.addRow(new Object[] {us.getProductId(), us.getProductName(), us.getQuantityAvail(), us.getQuantityAdded(), us.getMrp()});
+				
+			}
+	}
 }
+	
+//	private void selectRow() {
+//		if(table.getSelectedRow()<0) {
+//			JOptionPane.showMessageDialog(null, "Please select any row");
+//			return;
+//		}
+//		int srow = table.getSelectedRow();
+//		if (srow != -1) { // Ensure a row is selected
+//		    idTxt.setText(table.getModel().getValueAt(srow, 1).toString());
+//		    nameTxt.setText(table.getModel().getValueAt(srow, 2).toString());
+//		    availTxt.setText(table.getModel().getValueAt(srow, 3).toString());
+//		    addedTxt.setText(table.getModel().getValueAt(srow, 4).toString());
+//		    mrpTxt.setText(table.getModel().getValueAt(srow, 5).toString());
+//		} else {
+//		    // Handle the case where no row is selected
+//		    JOptionPane.showMessageDialog(null, "Please select a row from the table.");
+//		}
+//	}
+//}

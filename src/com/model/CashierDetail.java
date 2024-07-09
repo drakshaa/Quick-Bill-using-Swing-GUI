@@ -4,7 +4,7 @@ public class CashierDetail {
 
 	private int id;
 	private String name;
-	private int phone_no;
+	private String phone_no;
 	private String email;
 	private String address;
 	private String password;
@@ -21,10 +21,10 @@ public class CashierDetail {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getPhone_no() {
+	public String getPhone_no() {
 		return phone_no;
 	}
-	public void setPhone_no(int phone_no) {
+	public void setPhone_no(String phone_no) {
 		this.phone_no = phone_no;
 	}
 	public String getEmail() {

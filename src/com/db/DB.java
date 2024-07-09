@@ -9,14 +9,13 @@ public class DB {
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/productdb","draksha","cdraksha@nep");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/quickbill","draksha","cdraksha@nep");
 			
 			return con;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 

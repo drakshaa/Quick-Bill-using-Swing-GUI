@@ -50,7 +50,6 @@ public class NewBillForm extends JFrame {
 	private JTextField quantitytxt;
 	private JTextField discounttxt;
 	private JTextField billtxt;
-	private JComboBox prodidtxt;
 	private JLabel lblDate;
 	private JTextField textField_6;
 	private JScrollPane scrollPane;
@@ -60,6 +59,8 @@ public class NewBillForm extends JFrame {
 	private JButton btnNewButton;
 	private JButton btnAdd;
 	private JButton btnRemove;
+	private JComboBox<String> prodidtxt;
+
 
 	/**
 	 * Launch the application.
@@ -111,7 +112,11 @@ public class NewBillForm extends JFrame {
 		contentPane.add(getBtnNewButton());
 		contentPane.add(getBtnAdd());
 		contentPane.add(getBtnRemove());
+		prodidtxt = new JComboBox<>();
+
 		updatecombo();
+		displayData();
+		
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
@@ -217,12 +222,12 @@ public class NewBillForm extends JFrame {
 		}
 		return billtxt;
 	}
-	private JComboBox getProdidtxt() {
-		if (prodidtxt == null) {
-			prodidtxt = new JComboBox();
-			prodidtxt.setBounds(116, 101, 136, 22);
-		}
-		return prodidtxt;
+	private JComboBox<String> getProdidtxt() {
+	    if (prodidtxt == null) {
+	        prodidtxt = new JComboBox<>();
+	        prodidtxt.setBounds(116, 101, 136, 22);
+	    }
+	    return prodidtxt;
 	}
 	private JLabel getLblDate() {
 		if (lblDate == null) {
@@ -306,7 +311,7 @@ public class NewBillForm extends JFrame {
 					nb.setName(nametxt.getText());
 					nb.setMrp(Integer.parseInt(mrptxt.getText()));
 					nb.setQuantity(Integer.parseInt(quantitytxt.getText()));
-					nb.setDiscount(discounttxt.getText());
+					nb.setDiscount(Double.parseDouble(discounttxt.getText()));
 					NewBillService bill = new NewBillServiceImpl();
 					bill.addBill(nb);
 					JOptionPane.showMessageDialog(null, "Added Success");	
@@ -348,20 +353,21 @@ public class NewBillForm extends JFrame {
 		}
 		return btnRemove;
 	}
-	
+
 	private void updatecombo() {
-		JComboBox<String> comboBox = new JComboBox<>();
-		String sql = "select * from newbill";
-		try {
-			Statement stm = DB.connectDb().createStatement();
-			ResultSet rs = stm.executeQuery(sql);
-			while(rs.next()) {
-				comboBox.addItem(rs.getString("prodid"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	    String sql = "select * from updatestock";
+	    try {
+	        Statement stm = DB.connectDb().createStatement();
+	        ResultSet rs = stm.executeQuery(sql);
+	        while (rs.next()) {
+	            int id = rs.getInt("productid");
+	            prodidtxt.addItem(String.valueOf(id));
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
 	}
+
 	
 	private void displayData(){
 		NewBillService bill = new NewBillServiceImpl();
@@ -373,7 +379,7 @@ public class NewBillForm extends JFrame {
 			
 			for(NewBill nb : blist) {
 				
-				tmodel.addRow(new Object[] {nb.getId(), nb.getCustomername(), nb.getProductid(), nb.getName(), nb.getMrp(), nb.getQuantity(), nb.getDiscount()});
+				tmodel.addRow(new Object[] { nb.getName(), nb.getMrp(), nb.getQuantity(), nb.getTotalPriceWithDiscount()});
 				
 			}
 	}

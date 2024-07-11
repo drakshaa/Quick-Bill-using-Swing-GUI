@@ -7,7 +7,10 @@ public class NewBill {
 	private String name;
 	private int mrp;
 	private int quantity;
-	private String discount;
+	private double discount;
+	private double price;
+    private double totalPriceWithDiscount;
+
 	public int getBillno() {
 		return billno;
 	}
@@ -44,18 +47,32 @@ public class NewBill {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public String getDiscount() {
+	public double getDiscount() {
 		return discount;
 	}
-	public void setDiscount(String discount) {
+	public void setDiscount(double discount) {
 		this.discount = discount;
 	}
-	@Override
-	public String toString() {
-		return "NewBill [billno=" + billno + ", customername=" + customername + ", productid=" + productid + ", name="
-				+ name + ", mrp=" + mrp + ", quantity=" + quantity + ", discount=" + discount + "]";
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
 	}
 	
-	
+	public double getTotalPriceWithDiscount() {
+        return totalPriceWithDiscount;
+    }
 
+    public void calculateTotalPriceWithDiscount() {
+        double totalPrice = this.price * this.quantity;
+        this.totalPriceWithDiscount = totalPrice - (totalPrice * this.discount / 100);
+    }
+
+    @Override
+	public String toString() {
+		return "NewBill [billno=" + billno + ", customername=" + customername + ", productid=" + productid + ", name="
+				+ name + ", mrp=" + mrp + ", quantity=" + quantity + ", discount=" + discount + ", price=" + price
+				+ ", totalPriceWithDiscount=" + totalPriceWithDiscount + "]";
+	}
 }

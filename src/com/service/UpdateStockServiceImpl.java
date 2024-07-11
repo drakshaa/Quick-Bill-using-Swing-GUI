@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.db.DB;
-import com.model.Product;
 import com.model.UpdateStock;
 
 public class UpdateStockServiceImpl implements UpdateStockService {

@@ -26,6 +26,8 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UpdateStockForm extends JFrame {
 
@@ -56,7 +58,7 @@ public class UpdateStockForm extends JFrame {
 				try {
 					UpdateStockForm frame = new UpdateStockForm();
 					frame.setVisible(true);
-					
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -91,8 +93,9 @@ public class UpdateStockForm extends JFrame {
 		contentPane.add(getBtnNewButton());
 		contentPane.add(getBtnUpdate());
 		displayData();
-	
+
 	}
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("Update Stock");
@@ -101,14 +104,30 @@ public class UpdateStockForm extends JFrame {
 		}
 		return lblNewLabel;
 	}
+
 	private JScrollPane getScrollPane() {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
+			scrollPane.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+
+					int srow = table.getSelectedRow();
+					idTxt.setText(model.getValueAt(srow, 0).toString());
+					nameTxt.setText(model.getValueAt(srow, 1).toString());
+					availTxt.setText(model.getValueAt(srow, 2).toString());
+					addedTxt.setText(model.getValueAt(srow, 3).toString());
+					mrpTxt.setText(model.getValueAt(srow, 4).toString());
+				}
+			});
 			scrollPane.setBounds(304, 26, 383, 430);
 			scrollPane.setViewportView(getTable());
 		}
 		return scrollPane;
 	}
+
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("Product Id");
@@ -117,6 +136,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return lblNewLabel_1;
 	}
+
 	private JTextField getIdTxt() {
 		if (idTxt == null) {
 			idTxt = new JTextField();
@@ -125,6 +145,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return idTxt;
 	}
+
 	private JLabel getLblNewLabel_1_1() {
 		if (lblNewLabel_1_1 == null) {
 			lblNewLabel_1_1 = new JLabel("Product Name");
@@ -133,6 +154,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return lblNewLabel_1_1;
 	}
+
 	private JTextField getNameTxt() {
 		if (nameTxt == null) {
 			nameTxt = new JTextField();
@@ -141,6 +163,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return nameTxt;
 	}
+
 	private JLabel getLblNewLabel_1_1_1() {
 		if (lblNewLabel_1_1_1 == null) {
 			lblNewLabel_1_1_1 = new JLabel("Quantity Available");
@@ -149,6 +172,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return lblNewLabel_1_1_1;
 	}
+
 	private JTextField getAvailTxt() {
 		if (availTxt == null) {
 			availTxt = new JTextField();
@@ -157,6 +181,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return availTxt;
 	}
+
 	private JLabel getLblNewLabel_1_1_1_1() {
 		if (lblNewLabel_1_1_1_1 == null) {
 			lblNewLabel_1_1_1_1 = new JLabel("Quantity Added");
@@ -165,6 +190,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return lblNewLabel_1_1_1_1;
 	}
+
 	private JTextField getAddedTxt() {
 		if (addedTxt == null) {
 			addedTxt = new JTextField();
@@ -173,6 +199,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return addedTxt;
 	}
+
 	private JLabel getLblNewLabel_1_1_1_1_1() {
 		if (lblNewLabel_1_1_1_1_1 == null) {
 			lblNewLabel_1_1_1_1_1 = new JLabel("Mrp");
@@ -181,6 +208,7 @@ public class UpdateStockForm extends JFrame {
 		}
 		return lblNewLabel_1_1_1_1_1;
 	}
+
 	private JTextField getMrpTxt() {
 		if (mrpTxt == null) {
 			mrpTxt = new JTextField();
@@ -189,37 +217,40 @@ public class UpdateStockForm extends JFrame {
 		}
 		return mrpTxt;
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"Product Id", "Product Name", "Available", "Mrp"
-				}
-			));
+			table.setModel(new DefaultTableModel(new Object[][] {},
+					new String[] { "Product Id", "Product Name", "Available", "Mrp" }));
 		}
 		return table;
 	}
+
 	private JButton getBtnNewButton() {
 		if (btnNewButton == null) {
 			btnNewButton = new JButton("New");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+
 					UpdateStock us = new UpdateStock();
 					us.setProductId(Integer.parseInt(idTxt.getText()));
 					us.setProductName(nameTxt.getText());
 					us.setQuantityAvail(Integer.parseInt(availTxt.getText()));
 					us.setQuantityAdded(Integer.parseInt(addedTxt.getText()));
 					us.setMrp(Integer.parseInt(mrpTxt.getText()));
-				
+
 					UpdateStockService stock = new UpdateStockServiceImpl();
 					stock.addStock(us);
 					displayData();
-					JOptionPane.showMessageDialog(null, "Added Success");	
-	
+					JOptionPane.showMessageDialog(null, "Added Success");
+					
+					idTxt.setText("");
+					nameTxt.setText("");
+					availTxt.setText("");
+					addedTxt.setText("");
+					mrpTxt.setText("");
+
 				}
 			});
 			btnNewButton.setBackground(new Color(0, 255, 128));
@@ -229,24 +260,31 @@ public class UpdateStockForm extends JFrame {
 		}
 		return btnNewButton;
 	}
+
 	private JButton getBtnUpdate() {
 		if (btnUpdate == null) {
 			btnUpdate = new JButton("Update");
 			btnUpdate.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+
 					UpdateStock us = new UpdateStock();
 					us.setProductId(Integer.parseInt(idTxt.getText()));
 					us.setProductName(nameTxt.getText());
 					us.setQuantityAvail(Integer.parseInt(availTxt.getText()));
 					us.setQuantityAdded(Integer.parseInt(addedTxt.getText()));
 					us.setMrp(Integer.parseInt(mrpTxt.getText()));
-				
+
 					UpdateStockService stock = new UpdateStockServiceImpl();
 					stock.updateStock(us);
 					displayData();
-					JOptionPane.showMessageDialog(null, "Update Success");		
+					JOptionPane.showMessageDialog(null, "Update Success");
 					
+					idTxt.setText("");
+					nameTxt.setText("");
+					availTxt.setText("");
+					addedTxt.setText("");
+					mrpTxt.setText("");
+
 				}
 			});
 			btnUpdate.setBackground(new Color(151, 169, 255));
@@ -256,24 +294,23 @@ public class UpdateStockForm extends JFrame {
 		}
 		return btnUpdate;
 	}
-	
-	private void displayData(){
-		 UpdateStockService stock = new UpdateStockServiceImpl();
-			List<UpdateStock> slist = stock.getAllStock();
-			
-			DefaultTableModel tmodel = (DefaultTableModel) table.getModel();
-			
-			tmodel.setRowCount(0); //table reset
-			
-			for(UpdateStock us : slist) {
-				
-				tmodel.addRow(new Object[] {us.getProductId(), us.getProductName(), us.getQuantityAvail(), us.getQuantityAdded(), us.getMrp()});
-				
-			}
+
+	private void displayData() {
+		UpdateStockService stock = new UpdateStockServiceImpl();
+		List<UpdateStock> slist = stock.getAllStock();
+
+		DefaultTableModel tmodel = (DefaultTableModel) table.getModel();
+
+		tmodel.setRowCount(0); // table reset
+
+		for (UpdateStock us : slist) {
+
+			tmodel.addRow(new Object[] { us.getProductId(), us.getProductName(), us.getQuantityAvail(), us.getMrp() });
+
+		}
 	}
 }
-	
-//	private void selectRow() {
+
 //		if(table.getSelectedRow()<0) {
 //			JOptionPane.showMessageDialog(null, "Please select any row");
 //			return;

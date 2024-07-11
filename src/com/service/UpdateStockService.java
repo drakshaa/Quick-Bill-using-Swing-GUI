@@ -1,6 +1,7 @@
 package com.service;
 
 import java.util.List;
+
 import com.model.UpdateStock;
 
 public interface UpdateStockService {
@@ -10,5 +11,8 @@ public interface UpdateStockService {
 	List<UpdateStock> getAllStock();
 	
 	void updateStock(UpdateStock us);
+	
+	List<UpdateStock> searchUpdateStock(String sdata);
+
 	
 }

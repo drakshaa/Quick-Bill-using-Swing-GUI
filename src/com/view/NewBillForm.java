@@ -333,19 +333,20 @@ public class NewBillForm extends JFrame {
 						JOptionPane.showMessageDialog(null, "Please select any row");
 						return;
 					}
-//					
-//					int srow = table.getSelectedRow();					
-//					int pid = (int) table.getModel().getValueAt(srow, 0);
-//					nameTxt.setText(table.getModel().getValueAt(srow, 1).toString());
-//					numTxt.setText(table.getModel().getValueAt(srow, 2).toString());
-//					addressTxt.setText(table.getModel().getValueAt(srow, 3).toString());
-//					emailTxt.setText(table.getModel().getValueAt(srow, 4).toString());
-//					pswTxt.setText(table.getModel().getValueAt(srow, 5).toString());
-//					
-//					CashierDetails detail = new CashierDetailImpl();
-//					detail.deleteDetail(pid);
-//					JOptionPane.showMessageDialog(null, "deleted success");
-//					displayData(); // get all product after deleted
+					
+					int srow = table.getSelectedRow();
+					int billno = Integer.parseInt(table.getModel().getValueAt(srow, 0).toString());
+					cnametxt.setText(table.getModel().getValueAt(srow, 1).toString());
+					prodidtxt.setSelectedItem(table.getModel().getValueAt(srow, 2).toString());
+					nametxt.setText(table.getModel().getValueAt(srow, 3).toString());
+					mrptxt.setText(table.getModel().getValueAt(srow, 4).toString());
+					quantitytxt.setText(table.getModel().getValueAt(srow, 5).toString());
+					discounttxt.setText(table.getModel().getValueAt(srow, 6).toString());
+
+					NewBillService bill = new NewBillServiceImpl();
+					bill.deleteBill(billno);
+					JOptionPane.showMessageDialog(null, "deleted success");
+					displayData(); // get all product after deleted
 				}
 			});
 			btnRemove.setFont(new Font("Tahoma", Font.BOLD, 14));

@@ -8,6 +8,7 @@ import java.util.List;
 import com.db.DB;
 import com.model.CashierDetail;
 import com.model.NewBill;
+import com.model.UpdateStock;
 
 public class NewBillServiceImpl implements NewBillService {
 	
@@ -66,6 +67,36 @@ List<NewBill> nlist = new ArrayList<>();
 			e.printStackTrace();
 		}
 		return nlist;
+	}
+
+	@Override
+	public List<NewBill> searchBill(String bdata) {
+	List<NewBill> blist = new ArrayList<>();
+		
+		try {
+			
+		String sql = "select * from newbill where billno like '%"+sdata+"%' ";
+		Statement stm = DB.connectDb().createStatement();
+		ResultSet rs = stm.executeQuery(sql);
+		
+		while (rs.next()) {
+			
+			//row mapping object
+			UpdateStock us = new UpdateStock();
+			
+			us.setProductId(rs.getInt("productid"));
+			us.setProductName(rs.getString("productname"));
+			us.setQuantityAvail(rs.getInt("quantityavail"));
+			us.setQuantityAdded(rs.getInt("quantityadded"));
+			us.setMrp(rs.getInt("mrp"));
+			
+			slist.add(us);
+		}
+		}  catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return slist;
 	}
 	}
 	

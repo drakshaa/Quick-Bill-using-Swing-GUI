@@ -11,9 +11,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import com.model.UpdateStock;
-import com.service.UpdateStockService;
-import com.service.UpdateStockServiceImpl;
+import com.model.NewBill;
+import com.service.NewBillService;
+import com.service.NewBillServiceImpl;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -67,6 +67,7 @@ public class SearchBillForm extends JFrame {
 		contentPane.add(getScrollPane());
 		contentPane.add(getSearchField());
 		contentPane.add(getSearchTxt());
+		displayData();
 	}
 
 	private JLabel getLblNewLabel() {
@@ -112,19 +113,20 @@ public class SearchBillForm extends JFrame {
 			searchField.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyReleased(KeyEvent e) {
-					String sdata = searchTxt.getText().trim();
+					String bdata = searchTxt.getText().trim();
 					
-					UpdateStockService info = new UpdateStockServiceImpl();
-					List<UpdateStock> slist = info.searchUpdateStock(sdata);
+					NewBillService bill = new NewBillServiceImpl();
+					List<NewBill> blist = bill.searchBill(bdata);
 					
 					DefaultTableModel tmodel = (DefaultTableModel) table.getModel();
 					
 					tmodel.setRowCount(0); //table reset
 					
-					for(UpdateStock s : slist) {
+					for(NewBill b : blist) {
 						
 						
-						tmodel.addRow(new Object[] {s.getProductId(), s.getProductName(), s.getQuantityAvail(), s.getMrp()});
+						tmodel.addRow(new Object[] {b.getBillno(), b.getCustomername(), b.getPrice(), b.getDate()});
+				}
 				}
 			});
 			searchField.setBounds(143, 98, 214, 20);
@@ -132,7 +134,7 @@ public class SearchBillForm extends JFrame {
 		}
 		return searchField;
 	}
-}	private JTextField getSearchTxt() {
+	private JTextField getSearchTxt() {
 		if (searchTxt == null) {
 			searchTxt = new JTextField();
 			searchTxt.setBounds(138, 98, 191, 20);
@@ -140,4 +142,20 @@ public class SearchBillForm extends JFrame {
 		}
 		return searchTxt;
 	}
+	
+	private void displayData() {
+		NewBillService bill = new NewBillServiceImpl();
+		List<NewBill> blist = bill.getAllBill();
 
+		DefaultTableModel tmodel = (DefaultTableModel) table.getModel();
+
+		tmodel.setRowCount(0); // table reset
+
+		for (NewBill b : blist) {
+
+			tmodel.addRow(new Object[] {b.getBillno(), b.getCustomername(), b.getPrice(), b.getDate()});
+
+		}
+	}
+
+}

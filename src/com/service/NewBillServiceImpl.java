@@ -58,7 +58,7 @@ List<NewBill> nlist = new ArrayList<>();
 				nb.setMrp(rs.getInt("mrp"));
 				nb.setQuantity(rs.getInt("quantity"));
 				nb.setDiscount(rs.getDouble("discount"));
-				nb.calculateTotalPriceWithDiscount();
+//				nb.TotalPriceWithDiscount();
 				
 				nlist.add(nb);
 			
@@ -75,28 +75,27 @@ List<NewBill> nlist = new ArrayList<>();
 		
 		try {
 			
-		String sql = "select * from newbill where billno like '%"+sdata+"%' ";
+		String sql = "select * from newbill where billno like '%"+bdata+"%' ";
 		Statement stm = DB.connectDb().createStatement();
 		ResultSet rs = stm.executeQuery(sql);
 		
 		while (rs.next()) {
 			
 			//row mapping object
-			UpdateStock us = new UpdateStock();
+			NewBill b = new NewBill();
 			
-			us.setProductId(rs.getInt("productid"));
-			us.setProductName(rs.getString("productname"));
-			us.setQuantityAvail(rs.getInt("quantityavail"));
-			us.setQuantityAdded(rs.getInt("quantityadded"));
-			us.setMrp(rs.getInt("mrp"));
+			b.setBillno(rs.getInt("billno"));
+			b.setCustomername(rs.getString("custname"));
+			b.setPrice(rs.getDouble("price"));
+//			b.
 			
-			slist.add(us);
+			blist.add(b);
 		}
 		}  catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		return slist;
+		return blist;
 	}
 	}
 	
